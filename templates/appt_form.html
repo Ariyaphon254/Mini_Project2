@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'แก้ไข' if appt else 'เพิ่ม' }}นัดหมาย - PawCare{% endblock %}
+{% block page_title %}{{ 'แก้ไขนัดหมาย' if appt else 'เพิ่มนัดหมายใหม่' }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:640px">
+  <div class="card-header"><h3>📅 ข้อมูลนัดหมาย</h3></div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>สัตว์เลี้ยง *</label>
+          <select name="pet_id" required>
+            <option value="">-- เลือกสัตว์เลี้ยง --</option>
+            {% for p in pets %}<option value="{{ p.pet_id }}" {% if appt and appt.pet_id==p.pet_id %}selected{% endif %}>{{ p.label }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>สัตวแพทย์ *</label>
+          <select name="vet_id" required>
+            <option value="">-- เลือกสัตวแพทย์ --</option>
+            {% for v in vets %}<option value="{{ v.vet_id }}" {% if appt and appt.vet_id==v.vet_id %}selected{% endif %}>{{ v.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>วันที่นัดหมาย *</label>
+          <input name="appt_date" type="date" value="{{ appt.appt_date if appt else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>สถานะ *</label>
+          <select name="status" required>
+            {% for s in ['Scheduled','Completed','Cancelled'] %}
+            <option value="{{ s }}" {% if appt and appt.status==s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>เหตุผล/อาการ *</label>
+          <input name="reason" value="{{ appt.reason if appt else '' }}" required>
+        </div>
+        <div class="form-group full">
+          <label>หมายเหตุ</label>
+          <textarea name="notes" rows="2">{{ appt.notes if appt else '' }}</textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:22px">
+        <button class="btn btn-primary" type="submit">💾 บันทึก</button>
+        <a href="{{ url_for('appointments') }}" class="btn btn-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

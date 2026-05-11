@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}สัตวแพทย์ - PawCare{% endblock %}
+{% block page_title %}สัตวแพทย์{% endblock %}
+{% block topbar_action %}<a href="{{ url_for('vet_new') }}" class="btn btn-primary">+ เพิ่มสัตวแพทย์</a>{% endblock %}
+
+{% block content %}
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ความเชี่ยวชาญ</th><th>โทรศัพท์</th><th>อีเมล</th><th>การจัดการ</th></tr></thead>
+    <tbody>
+      {% for v in vets %}
+      <tr>
+        <td>{{ v.vet_id }}</td>
+        <td>🩺 <strong>นพ.{{ v.first_name }} {{ v.last_name }}</strong></td>
+        <td><span class="badge badge-blue">{{ v.specialty }}</span></td>
+        <td>{{ v.phone }}</td>
+        <td>{{ v.email }}</td>
+        <td>
+          <div class="actions">
+            <a href="{{ url_for('vet_edit', vid=v.vet_id) }}" class="btn btn-secondary btn-sm">✏️ แก้ไข</a>
+            <form method="post" action="{{ url_for('vet_delete', vid=v.vet_id) }}" onsubmit="return confirm('ยืนยันการลบ?')">
+              <button class="btn btn-danger btn-sm">🗑️ ลบ</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" style="text-align:center;padding:32px;color:#94a3b8">ไม่พบข้อมูล</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}สัตว์เลี้ยง - PawCare{% endblock %}
+{% block page_title %}สัตว์เลี้ยง{% endblock %}
+{% block topbar_action %}<a href="{{ url_for('pet_new') }}" class="btn btn-primary">+ เพิ่มสัตว์เลี้ยง</a>{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+  <form method="get" style="display:flex;gap:10px;width:100%">
+    <input name="q" value="{{ q }}" placeholder="🔍 ค้นหาชื่อ, สายพันธุ์...">
+    <button class="btn btn-secondary" type="submit">ค้นหา</button>
+    {% if q %}<a href="{{ url_for('pets') }}" class="btn btn-secondary">ล้าง</a>{% endif %}
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>ชื่อ</th><th>ประเภท</th><th>สายพันธุ์</th><th>วันเกิด</th><th>เจ้าของ</th><th>การจัดการ</th></tr></thead>
+    <tbody>
+      {% for p in pets %}
+      <tr>
+        <td>{{ p.pet_id }}</td>
+        <td><strong>{{ p.name }}</strong></td>
+        <td>
+          {% if p.species == 'Dog' %}🐶{% elif p.species == 'Cat' %}🐱{% elif p.species == 'Bird' %}🐦{% elif p.species == 'Rabbit' %}🐰{% else %}🐾{% endif %}
+          {{ p.species }}
+        </td>
+        <td>{{ p.breed or '-' }}</td>
+        <td>{{ p.birth_date or '-' }}</td>
+        <td>{{ p.owner_name }}</td>
+        <td>
+          <div class="actions">
+            <a href="{{ url_for('pet_edit', pid=p.pet_id) }}" class="btn btn-secondary btn-sm">✏️ แก้ไข</a>
+            <form method="post" action="{{ url_for('pet_delete', pid=p.pet_id) }}" onsubmit="return confirm('ยืนยันการลบ?')">
+              <button class="btn btn-danger btn-sm">🗑️ ลบ</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8">ไม่พบข้อมูล</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

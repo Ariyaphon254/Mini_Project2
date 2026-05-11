@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}นัดหมาย - PawCare{% endblock %}
+{% block page_title %}นัดหมาย{% endblock %}
+{% block topbar_action %}<a href="{{ url_for('appt_new') }}" class="btn btn-primary">+ เพิ่มนัดหมาย</a>{% endblock %}
+
+{% block content %}
+<div style="display:flex;gap:8px;margin-bottom:18px">
+  <a href="{{ url_for('appointments') }}" class="btn {% if not status_filter %}btn-primary{% else %}btn-secondary{% endif %}">ทั้งหมด</a>
+  <a href="{{ url_for('appointments', status='Scheduled') }}" class="btn {% if status_filter=='Scheduled' %}btn-primary{% else %}btn-secondary{% endif %}">📅 นัดหมาย</a>
+  <a href="{{ url_for('appointments', status='Completed') }}" class="btn {% if status_filter=='Completed' %}btn-primary{% else %}btn-secondary{% endif %}">✓ เสร็จสิ้น</a>
+  <a href="{{ url_for('appointments', status='Cancelled') }}" class="btn {% if status_filter=='Cancelled' %}btn-primary{% else %}btn-secondary{% endif %}">✗ ยกเลิก</a>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>สัตว์เลี้ยง</th><th>เจ้าของ</th><th>สัตวแพทย์</th><th>วันที่</th><th>เหตุผล</th><th>สถานะ</th><th>การจัดการ</th></tr></thead>
+    <tbody>
+      {% for a in appointments %}
+      <tr>
+        <td>{{ a.appt_id }}</td>
+        <td><strong>{{ a.pet_name }}</strong></td>
+        <td>{{ a.owner_name }}</td>
+        <td>{{ a.vet_name }}</td>
+        <td>{{ a.appt_date }}</td>
+        <td>{{ a.reason }}</td>
+        <td>
+          {% if a.status == 'Completed' %}<span class="badge badge-green">✓ เสร็จสิ้น</span>
+          {% elif a.status == 'Scheduled' %}<span class="badge badge-blue">📅 นัดหมาย</span>
+          {% else %}<span class="badge badge-red">✗ ยกเลิก</span>{% endif %}
+        </td>
+        <td>
+          <div class="actions">
+            <a href="{{ url_for('appt_edit', aid=a.appt_id) }}" class="btn btn-secondary btn-sm">✏️</a>
+            <form method="post" action="{{ url_for('appt_delete', aid=a.appt_id) }}" onsubmit="return confirm('ยืนยันการลบ?')">
+              <button class="btn btn-danger btn-sm">🗑️</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" style="text-align:center;padding:32px;color:#94a3b8">ไม่พบข้อมูล</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

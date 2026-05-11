@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}เจ้าของสัตว์เลี้ยง - PawCare{% endblock %}
+{% block page_title %}เจ้าของสัตว์เลี้ยง{% endblock %}
+{% block topbar_action %}<a href="{{ url_for('owner_new') }}" class="btn btn-primary">+ เพิ่มเจ้าของ</a>{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+  <form method="get" style="display:flex;gap:10px;width:100%">
+    <input name="q" value="{{ q }}" placeholder="🔍 ค้นหาชื่อ, อีเมล...">
+    <button class="btn btn-secondary" type="submit">ค้นหา</button>
+    {% if q %}<a href="{{ url_for('owners') }}" class="btn btn-secondary">ล้าง</a>{% endif %}
+  </form>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>โทรศัพท์</th><th>อีเมล</th><th>ที่อยู่</th><th>สัตว์เลี้ยง</th><th>การจัดการ</th></tr></thead>
+    <tbody>
+      {% for o in owners %}
+      <tr>
+        <td>{{ o.owner_id }}</td>
+        <td><strong>{{ o.first_name }} {{ o.last_name }}</strong></td>
+        <td>{{ o.phone }}</td>
+        <td>{{ o.email }}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ o.address }}</td>
+        <td><span class="badge badge-blue">{{ o.pet_count }} ตัว</span></td>
+        <td>
+          <div class="actions">
+            <a href="{{ url_for('owner_edit', oid=o.owner_id) }}" class="btn btn-secondary btn-sm">✏️ แก้ไข</a>
+            <form method="post" action="{{ url_for('owner_delete', oid=o.owner_id) }}" onsubmit="return confirm('ยืนยันการลบ?')">
+              <button class="btn btn-danger btn-sm">🗑️ ลบ</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8">ไม่พบข้อมูล</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

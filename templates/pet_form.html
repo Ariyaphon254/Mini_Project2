@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'แก้ไข' if pet else 'เพิ่ม' }}สัตว์เลี้ยง - PawCare{% endblock %}
+{% block page_title %}{{ 'แก้ไขข้อมูลสัตว์เลี้ยง' if pet else 'เพิ่มสัตว์เลี้ยงใหม่' }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:580px">
+  <div class="card-header"><h3>🐾 ข้อมูลสัตว์เลี้ยง</h3></div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>เจ้าของ *</label>
+          <select name="owner_id" required>
+            <option value="">-- เลือกเจ้าของ --</option>
+            {% for o in owners %}<option value="{{ o.owner_id }}" {% if pet and pet.owner_id==o.owner_id %}selected{% endif %}>{{ o.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ชื่อสัตว์เลี้ยง *</label>
+          <input name="name" value="{{ pet.name if pet else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>ประเภท *</label>
+          <select name="species" required>
+            {% for s in ['Dog','Cat','Bird','Rabbit','Other'] %}
+            <option value="{{ s }}" {% if pet and pet.species==s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>สายพันธุ์</label>
+          <input name="breed" value="{{ pet.breed if pet else '' }}">
+        </div>
+        <div class="form-group">
+          <label>วันเกิด</label>
+          <input name="birth_date" type="date" value="{{ pet.birth_date if pet else '' }}">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:22px">
+        <button class="btn btn-primary" type="submit">💾 บันทึก</button>
+        <a href="{{ url_for('pets') }}" class="btn btn-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

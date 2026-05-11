@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'แก้ไข' if vet else 'เพิ่ม' }}สัตวแพทย์ - PawCare{% endblock %}
+{% block page_title %}{{ 'แก้ไขข้อมูลสัตวแพทย์' if vet else 'เพิ่มสัตวแพทย์ใหม่' }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:580px">
+  <div class="card-header"><h3>🩺 ข้อมูลสัตวแพทย์</h3></div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>ชื่อ *</label>
+          <input name="first_name" value="{{ vet.first_name if vet else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>นามสกุล *</label>
+          <input name="last_name" value="{{ vet.last_name if vet else '' }}" required>
+        </div>
+        <div class="form-group full">
+          <label>ความเชี่ยวชาญ *</label>
+          <select name="specialty" required>
+            {% for s in ['General Practice','Surgery','Dermatology','Dentistry','Exotic Animals','Ophthalmology'] %}
+            <option value="{{ s }}" {% if vet and vet.specialty==s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>โทรศัพท์ *</label>
+          <input name="phone" value="{{ vet.phone if vet else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>อีเมล *</label>
+          <input name="email" type="email" value="{{ vet.email if vet else '' }}" required>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:22px">
+        <button class="btn btn-primary" type="submit">💾 บันทึก</button>
+        <a href="{{ url_for('vets') }}" class="btn btn-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

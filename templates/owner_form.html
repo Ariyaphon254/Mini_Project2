@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'แก้ไข' if owner else 'เพิ่ม' }}เจ้าของ - PawCare{% endblock %}
+{% block page_title %}{{ 'แก้ไขข้อมูลเจ้าของ' if owner else 'เพิ่มเจ้าของใหม่' }}{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:640px">
+  <div class="card-header"><h3>📋 ข้อมูลเจ้าของสัตว์เลี้ยง</h3></div>
+  <div class="card-body">
+    <form method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>ชื่อ *</label>
+          <input name="first_name" value="{{ owner.first_name if owner else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>นามสกุล *</label>
+          <input name="last_name" value="{{ owner.last_name if owner else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>โทรศัพท์ *</label>
+          <input name="phone" value="{{ owner.phone if owner else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>อีเมล *</label>
+          <input name="email" type="email" value="{{ owner.email if owner else '' }}" required>
+        </div>
+        <div class="form-group full">
+          <label>ที่อยู่</label>
+          <textarea name="address" rows="2">{{ owner.address if owner else '' }}</textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:22px">
+        <button class="btn btn-primary" type="submit">💾 บันทึก</button>
+        <a href="{{ url_for('owners') }}" class="btn btn-secondary">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
